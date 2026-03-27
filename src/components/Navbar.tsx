@@ -2,20 +2,42 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/portfolio", label: "Project" },
-  { href: "/blog", label: "Blog" },
+  { href: "#hero", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#portfolio", label: "Project" }
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState("#hero");
+
+  // Keep track of scroll position manually instead of Nextjs usePathname for single page
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navLinks.map(link => link.href.substring(1));
+      let current = "";
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // If the element crosses the middle of the viewport
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            current = section;
+          }
+        }
+      });
+      if (current) setActiveHash(`#${current}`);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isDashboard = pathname.startsWith("/dashboard");
 
@@ -24,7 +46,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="#hero" className="flex items-center gap-2 group">
             <span className="font-display font-bold text-xl text-white group-hover:text-accent-light transition-colors">
               <span className="text-accent">Rifaldi</span>Creative
             </span>
@@ -34,29 +56,29 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center gap-6">
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
                   className={`relative text-sm font-medium transition-colors ${
-                    pathname === link.href
+                    activeHash === link.href || (pathname === '/' && activeHash === '' && link.href === '#hero')
                       ? "text-white font-bold"
                       : "text-gray-400 hover:text-white"
                   }`}
                 >
-                  {pathname === link.href && (
+                  {(activeHash === link.href || (pathname === '/' && activeHash === '' && link.href === '#hero')) && (
                     <motion.div
                       layoutId="activeNavIndicator"
                       className="absolute -bottom-2 left-0 right-0 h-0.5 bg-accent rounded-full"
                     />
                   )}
                   {link.label}
-                </Link>
+                </a>
               ))}
             </div>
 
-            <Link href="/contact" className="hidden lg:flex px-6 py-2 border border-accent/30 hover:border-accent text-accent-light hover:text-white rounded-lg text-sm font-medium transition-colors items-center justify-center">
+            <a href="mailto:contact@rifaldicreative.com" className="hidden lg:flex px-6 py-2 border border-accent/30 hover:border-accent text-accent-light hover:text-white rounded-lg text-sm font-medium transition-colors items-center justify-center">
               Contact Me
-            </Link>
+            </a>
 
             {/* Auth Dashboard (Visible only to owner) */}
             {user && !isDashboard && (
@@ -105,26 +127,26 @@ export default function Navbar() {
           >
             <div className="px-4 py-4 space-y-2">
               {navLinks.map((link) => (
-                <Link
+                <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
                   className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === link.href
+                    activeHash === link.href
                       ? "text-white bg-accent/20 border border-accent/20"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
-              <Link
-                href="/contact"
+              <a
+                href="mailto:contact@rifaldicreative.com"
                 onClick={() => setMobileOpen(false)}
                 className="block mt-4 px-4 py-3 bg-accent text-white text-center rounded-lg text-sm font-medium"
               >
                 Contact Me
-              </Link>
+              </a>
             </div>
           </motion.div>
         )}

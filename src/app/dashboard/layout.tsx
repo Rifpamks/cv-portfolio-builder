@@ -33,15 +33,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
     if (user) {
       const checkPin = async () => {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          setPinSet(data.pinSet || false);
-          if (!data.pinSet && pathname !== "/dashboard/pin") {
-            router.push("/dashboard/pin");
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setPinSet(data.pinSet || false);
+            if (!data.pinSet && pathname !== "/dashboard/pin") {
+              router.push("/dashboard/pin");
+            }
           }
+        } catch (error) {
+          console.warn("Gracefully handled fetching pin error: ", error);
+        } finally {
+          setCheckingPin(false);
         }
-        setCheckingPin(false);
       };
       checkPin();
     }

@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             });
           }
         } catch (error) {
-          console.error("Error fetching or creating user document:", error);
+          console.warn("Gracefully handling firestore permission issue during auth setup");
         }
       } else {
         setUser(null);

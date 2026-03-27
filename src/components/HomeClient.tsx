@@ -3,21 +3,23 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function HomeClient({ profileData }: { profileData: any }) {
+export default function HomeClient({ profileData, portfolioData }: { profileData: any, portfolioData: any[] }) {
   const fullName = profileData?.profile?.fullName || "Rifaldi Adi Pamungkas";
   const title = profileData?.profile?.title || "IT Enthusiast";
   const summary = profileData?.profile?.summary || `I'm a person who has a keen interest in technology and development. I focus on creating attractive and highly functional systems to develop professional products. Currently, I'm enhancing my skills to build dynamic applications and innovative digital solutions.`;
-  // If the user has uploaded a photo to Firebase, use it. Otherwise placeholder.
   const photoURL = profileData?.profile?.photoURL || "/profile.jpg";
 
+  // About Data (Fallback or CMS driven if you add it later)
+  const techStack = ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Firebase Auth", "Firestore", "Firebase Storage"];
+
   return (
-    <div className="min-h-screen bg-[#0F1015] text-white pt-24 overflow-hidden relative">
-      {/* Abstract Background Shapes */}
-      <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/20 rounded-full blur-[120px] -z-10 pointer-events-none translate-x-1/2" />
-      
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-6rem)]">
-        
-        {/* Left Content */}
+    <div className="min-h-screen bg-[#0F1015] text-white pt-24 relative selection:bg-accent/30 selection:text-white pb-24">
+      {/* Global Background Shapes */}
+      <div className="fixed top-1/4 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] -z-10 pointer-events-none translate-x-1/2" />
+      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] -z-10 pointer-events-none -translate-x-1/2" />
+
+      {/* --- HERO SECTION --- */}
+      <section id="hero" className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-6rem)] relative">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -26,10 +28,10 @@ export default function HomeClient({ profileData }: { profileData: any }) {
         >
           <div>
             <h2 className="text-xl md:text-2xl font-medium text-gray-300 mb-2">Hello Buds</h2>
-            <h1 className="text-4xl md:text-6xl font-bold font-display leading-tight mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold font-display leading-tight mb-4 tracking-tight">
               I am <span className="text-accent">{fullName}</span>
             </h1>
-            <p className="text-gray-400 font-medium tracking-wide">{title}</p>
+            <p className="text-accent-light font-medium tracking-wide text-lg">{title}</p>
           </div>
 
           <div className="w-16 h-0.5 bg-gray-600 mt-2 mb-4"></div>
@@ -39,15 +41,15 @@ export default function HomeClient({ profileData }: { profileData: any }) {
           </p>
 
           <div className="flex items-center gap-4 pt-4">
-            <button className="flex items-center gap-2 bg-accent hover:bg-accent-dark text-white px-6 py-3 rounded-lg font-medium transition-all group shadow-lg shadow-accent/20">
-              <svg className="w-5 h-5 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            <a href="#portfolio" className="flex items-center gap-2 bg-accent hover:bg-accent-dark text-white px-6 py-3 rounded-lg font-medium transition-all group shadow-lg shadow-accent/20">
+              <svg className="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
-              Download CV
-            </button>
-            <Link href="/about" className="px-8 py-3 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 rounded-lg font-medium transition-all">
+              View Projects
+            </a>
+            <a href="#about" className="px-8 py-3 bg-transparent border border-gray-600 hover:border-gray-400 text-gray-300 rounded-lg font-medium transition-all">
               More
-            </Link>
+            </a>
           </div>
 
           {/* Social Links */}
@@ -67,14 +69,12 @@ export default function HomeClient({ profileData }: { profileData: any }) {
           </div>
         </motion.div>
 
-        {/* Right Content / Image Area */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative h-[600px] flex items-center justify-center lg:justify-end"
         >
-          {/* Mockup's distinct purple blob background */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[500px] bg-gradient-to-br from-accent to-[#2E1A6E] rounded-[40px] md:rounded-[80px] rounded-br-none -z-10 rotate-6 skew-y-3 opacity-80" />
           
           {photoURL !== "/profile.jpg" ? (
@@ -89,17 +89,95 @@ export default function HomeClient({ profileData }: { profileData: any }) {
             </div>
           ) : (
              <div className="relative w-[360px] h-[480px] bg-gray-800 rounded-[40px] overflow-hidden shadow-2xl z-10 flex flex-col items-center justify-center border-2 border-dashed border-gray-600">
-               <span className="text-4xl mb-4">📸</span>
-               <p className="text-gray-400 text-sm text-center px-6">Upload your profile photo in the CMS Dashboard to replace this placeholder.</p>
+               <span className="text-6xl mb-4 text-gray-700">📸</span>
              </div>
           )}
 
-          {/* Floating UI Elements matching mockup */}
           <div className="absolute top-10 right-10 text-accent/50 text-4xl font-light scale-150 animate-pulse">+</div>
           <div className="absolute bottom-32 -right-8 w-12 h-12 border border-accent/40 rounded-full animate-bounce" />
           <div className="absolute top-1/4 -left-4 w-4 h-4 bg-accent/60 rounded-full blur-[2px]" />
         </motion.div>
-      </div>
+      </section>
+
+      {/* --- ABOUT SECTION --- */}
+      <section id="about" className="max-w-7xl mx-auto px-6 lg:px-12 py-32 border-t border-white/5 mt-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">About <span className="text-accent">Me</span></h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+            I specialize in developing high-quality web applications, turning complex problems into elegant, user-friendly designs. My workflow bridges the gap between design and functionality.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent/40 transition-colors">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <h3 className="text-2xl font-bold text-white relative z-10">My Philosophy</h3>
+            <p className="text-gray-400 leading-relaxed relative z-10">
+              I believe everyone deserves a stunning, professional presence that showcases their unique skills and experience. Every pixel counts, and every line of code should have a purpose. Building scalable, secure, and resilient applications is my mission.
+            </p>
+          </div>
+
+          <div className="bg-white/5 p-8 rounded-3xl border border-white/10">
+            <h3 className="text-2xl font-bold text-white mb-6">Core Tech Stack</h3>
+            <div className="flex flex-wrap gap-3">
+              {techStack.map((tech) => (
+                <span key={tech} className="px-4 py-2 bg-accent/10 border border-accent/20 rounded-full text-accent-light text-sm shadow-sm">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- PORTFOLIO SECTION --- */}
+      <section id="portfolio" className="max-w-7xl mx-auto px-6 lg:px-12 py-32 border-t border-white/5">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white mb-6">My <span className="text-accent">Projects</span></h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">A selection of my recent works and creations.</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {portfolioData && portfolioData.length > 0 ? (
+            portfolioData.map((item, i) => (
+              <motion.div 
+                key={item.id} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden group hover:border-accent/50 transition-colors relative"
+              >
+                <div className="h-56 bg-gradient-to-br from-[#161d49] to-[#0a0f2e] flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="text-6xl group-hover:scale-110 transition-transform duration-300">{["🚀", "🤖", "📋", "🎨", "💪", "📊"][i % 6]}</span>
+                </div>
+                <div className="p-8">
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-accent-light transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm mb-6 leading-relaxed line-clamp-3">{item.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.tags?.map((tag: string) => (
+                      <span key={tag} className="px-3 py-1 bg-accent/10 rounded text-accent-light text-xs font-medium border border-accent/20">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full py-12 text-center text-gray-500">
+              No projects added yet. Check back soon!
+            </div>
+          )}
+        </div>
+      </section>
+
     </div>
   );
 }
