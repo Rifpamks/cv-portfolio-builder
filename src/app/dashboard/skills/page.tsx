@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface Skill { id: string; name: string; level: number; category: string; }
@@ -18,7 +18,7 @@ export default function SkillsPage() {
   useEffect(() => {
     if (!user) return;
     const fetch = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
+      const snap = await adminGetDoc("users", user.uid);
       if (snap.exists() && snap.data().skills) setItems(snap.data().skills);
     };
     fetch();
@@ -27,7 +27,7 @@ export default function SkillsPage() {
   const save = async (list: Skill[]) => {
     if (!user) return;
     setSaving(true);
-    await updateDoc(doc(db, "users", user.uid), { skills: list });
+    await adminUpdateDoc("users", user.uid, { skills: list });
     setSaving(false);
   };
 

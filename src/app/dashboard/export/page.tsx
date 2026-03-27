@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface CvData {
@@ -23,7 +23,7 @@ export default function ExportPage() {
   useEffect(() => {
     if (!user) return;
     const fetch = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
+      const snap = await adminGetDoc("users", user.uid);
       if (snap.exists()) setData(snap.data() as CvData);
       setLoading(false);
     };

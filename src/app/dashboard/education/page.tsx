@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface Education {
@@ -20,7 +20,7 @@ export default function EducationPage() {
   useEffect(() => {
     if (!user) return;
     const fetch = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
+      const snap = await adminGetDoc("users", user.uid);
       if (snap.exists() && snap.data().education) setItems(snap.data().education);
     };
     fetch();
@@ -29,7 +29,7 @@ export default function EducationPage() {
   const save = async (list: Education[]) => {
     if (!user) return;
     setSaving(true);
-    await updateDoc(doc(db, "users", user.uid), { education: list });
+    await adminUpdateDoc("users", user.uid, { education: list });
     setSaving(false);
   };
 

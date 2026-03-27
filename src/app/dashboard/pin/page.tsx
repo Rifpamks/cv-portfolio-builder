@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +19,7 @@ export default function PinPage() {
   useEffect(() => {
     if (!user) return;
     const checkPin = async () => {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userDoc = await adminGetDoc("users", user.uid);
       if (userDoc.exists() && userDoc.data().pinSet) {
         setMode("enter");
       } else {
@@ -78,7 +78,7 @@ export default function PinPage() {
 
     if (!user) return;
     try {
-      await updateDoc(doc(db, "users", user.uid), {
+      await adminUpdateDoc("users", user.uid, {
         pin: pinStr, // In production, hash this
         pinSet: true,
       });
@@ -98,7 +98,7 @@ export default function PinPage() {
     }
     if (!user) return;
     try {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userDoc = await adminGetDoc("users", user.uid);
       if (userDoc.exists() && userDoc.data().pin === pinStr) {
         sessionStorage.setItem("pinVerified", "true");
         router.push("/dashboard");

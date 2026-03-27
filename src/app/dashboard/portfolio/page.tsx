@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface PortfolioItem {
@@ -21,7 +21,7 @@ export default function PortfolioDashPage() {
   useEffect(() => {
     if (!user) return;
     const fetch = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
+      const snap = await adminGetDoc("users", user.uid);
       if (snap.exists() && snap.data().portfolio) setItems(snap.data().portfolio);
     };
     fetch();
@@ -30,7 +30,7 @@ export default function PortfolioDashPage() {
   const save = async (list: PortfolioItem[]) => {
     if (!user) return;
     setSaving(true);
-    await updateDoc(doc(db, "users", user.uid), { portfolio: list });
+    await adminUpdateDoc("users", user.uid, { portfolio: list });
     setSaving(false);
   };
 

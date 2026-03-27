@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface Experience {
@@ -20,7 +20,7 @@ export default function ExperiencePage() {
   useEffect(() => {
     if (!user) return;
     const fetch = async () => {
-      const snap = await getDoc(doc(db, "users", user.uid));
+      const snap = await adminGetDoc("users", user.uid);
       if (snap.exists() && snap.data().experience) setItems(snap.data().experience);
     };
     fetch();
@@ -29,7 +29,7 @@ export default function ExperiencePage() {
   const save = async (list: Experience[]) => {
     if (!user) return;
     setSaving(true);
-    await updateDoc(doc(db, "users", user.uid), { experience: list });
+    await adminUpdateDoc("users", user.uid, { experience: list });
     setSaving(false);
   };
 

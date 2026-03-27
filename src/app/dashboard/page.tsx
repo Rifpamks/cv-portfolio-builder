@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 import { analyzeCompleteness } from "@/lib/aiRecommender";
 import Link from "next/link";
@@ -15,7 +15,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!user) return;
     const fetchData = async () => {
-      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userDoc = await adminGetDoc("users", user.uid);
       if (userDoc.exists()) {
         const data = userDoc.data();
         setAnalysis(analyzeCompleteness(data as Parameters<typeof analyzeCompleteness>[0]));

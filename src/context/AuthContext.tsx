@@ -2,7 +2,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, User } from "firebase/auth";
 import { auth, googleProvider, db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 
 interface AuthContextType {
   user: User | null;
@@ -28,10 +29,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(firebaseUser);
         // Auto-create user document in Firestore
         try {
-          const userRef = doc(db, "users", firebaseUser.uid);
-          const userSnap = await getDoc(userRef);
+          const userSnap = await adminGetDoc("users", firebaseUser.uid);
           if (!userSnap.exists()) {
-            await setDoc(userRef, {
+            await adminSetDoc("users", firebaseUser.uid, {
               displayName: firebaseUser.displayName || "",
               email: firebaseUser.email || "",
               photoURL: firebaseUser.photoURL || "",

@@ -2,7 +2,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (user) {
       const checkPin = async () => {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const userDoc = await adminGetDoc("users", user.uid);
           if (userDoc.exists()) {
             const data = userDoc.data();
             setPinSet(data.pinSet || false);
