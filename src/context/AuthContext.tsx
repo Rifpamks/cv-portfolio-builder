@@ -27,17 +27,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (firebaseUser) {
         setUser(firebaseUser);
         // Auto-create user document in Firestore
-        const userRef = doc(db, "users", firebaseUser.uid);
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            displayName: firebaseUser.displayName || "",
-            email: firebaseUser.email || "",
-            photoURL: firebaseUser.photoURL || "",
-            createdAt: serverTimestamp(),
-            pin: null,
-            pinSet: false,
-          });
+        try {
+          const userRef = doc(db, "users", firebaseUser.uid);
+          const userSnap = await getDoc(userRef);
+          if (!userSnap.exists()) {
+            await setDoc(userRef, {
+              displayName: firebaseUser.displayName || "",
+              email: firebaseUser.email || "",
+              photoURL: firebaseUser.photoURL || "",
+              createdAt: serverTimestamp(),
+              pin: null,
+              pinSet: false,
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching or creating user document:", error);
         }
       } else {
         setUser(null);
