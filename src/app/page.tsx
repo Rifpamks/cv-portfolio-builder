@@ -1,3 +1,4 @@
+// Production build trigger v2
 import { adminDb } from "@/lib/firebaseAdmin";
 import HomeClient from "@/components/HomeClient";
 
