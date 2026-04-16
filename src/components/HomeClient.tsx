@@ -91,7 +91,7 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative w-full flex items-center justify-center lg:justify-end order-1 lg:order-2 mt-8 lg:mt-0"
         >
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[340px] md:w-[320px] md:h-[400px] lg:w-[400px] lg:h-[500px] bg-gradient-to-br from-accent to-[#2E1A6E] rounded-[30px] lg:rounded-[40px] md:rounded-[80px] lg:rounded-br-none -z-10 rotate-6 skew-y-3 opacity-80" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[340px] md:w-[320px] md:h-[400px] lg:w-[400px] lg:h-[500px] bg-gradient-to-br from-accent to-[#2E1A6E] rounded-[30px] lg:rounded-[40px] md:rounded-[80px] lg:rounded-br-none z-0 rotate-6 skew-y-3 opacity-80 shadow-2xl shadow-accent/20" />
 
           {photoURL !== "/profile.jpg" ? (
             <div className="relative w-[260px] h-[320px] md:w-[300px] md:h-[380px] lg:w-[360px] lg:h-[480px] rounded-[30px] lg:rounded-[40px] overflow-hidden shadow-xl ring-1 ring-white/10 z-10 group">

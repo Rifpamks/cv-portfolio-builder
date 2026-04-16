@@ -92,7 +92,7 @@ export default function Navbar() {
               </button>
             )}
             {!user && pathname === "/" && (
-               <Link href="/login" className="px-3 py-2 text-xs text-transparent hover:text-gray-600 transition-colors">
+               <Link href="/login" className="px-3 py-2 text-xs text-gray-700/40 hover:text-gray-500 transition-colors">
                  admin
                </Link>
             )}
@@ -147,6 +147,11 @@ export default function Navbar() {
               >
                 Contact Me
               </a>
+              {!user && pathname === "/" && (
+                <Link href="/login" onClick={() => setMobileOpen(false)} className="block mt-2 px-4 py-2 text-xs text-gray-700/40 hover:text-gray-500 text-center transition-colors">
+                  admin
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
