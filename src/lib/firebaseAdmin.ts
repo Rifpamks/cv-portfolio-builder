@@ -10,6 +10,11 @@ try {
   // Otherwise, fallback to env variable (for Vercel deployment)
   if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
     serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    if (serviceAccount.private_key) {
+      // Vercel often escapes newlines in environment variables, which breaks the PEM format.
+      // This ensures actual newline characters are used so Firebase Admin can parse it.
+      serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+    }
   }
 }
 
