@@ -12,10 +12,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Safety check for build-time (SSG)
+const isConfigValid = firebaseConfig.apiKey && firebaseConfig.projectId;
 
-export const auth = getAuth(app);
+const app = getApps().length === 0 
+  ? (isConfigValid ? initializeApp(firebaseConfig) : null)
+  : getApp();
+
+export const auth = app ? getAuth(app) : ({} as any);
 export const googleProvider = new GoogleAuthProvider();
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+export const db = app ? getFirestore(app) : ({} as any);
+export const storage = app ? getStorage(app) : ({} as any);
 export default app;
