@@ -99,11 +99,11 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <div className="flex md:hidden items-center gap-4">
+          <div className="flex md:hidden items-center gap-3">
             {user && (
-              <Link href="/dashboard" className="text-sm font-medium text-accent">CMS</Link>
+              <Link href="/dashboard" className="text-xs font-semibold bg-accent/10 border border-accent/20 px-3 py-1.5 rounded-lg text-accent-light">CMS</Link>
             )}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-gray-400 hover:text-white">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {mobileOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
