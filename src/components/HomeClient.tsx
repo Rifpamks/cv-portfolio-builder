@@ -132,8 +132,8 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent/40 transition-colors">
             <h3 className="text-2xl font-bold text-white relative z-10">My Overview</h3>
-            <p className="text-gray-400 leading-relaxed relative z-10">
-              {summary}
+            <p className="text-gray-400 leading-relaxed relative z-10 whitespace-pre-wrap">
+              {profileData?.profile?.overview || summary}
             </p>
           </div>
 
@@ -151,14 +151,19 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
           {experiences.length > 0 && (
             <div className="bg-white/5 p-8 rounded-3xl border border-white/10 w-full md:col-span-1 hover:border-accent/40 transition-colors group">
               <h3 className="text-2xl font-bold text-white mb-4">Experience</h3>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {experiences.map((exp: any, i: number) => (
                   <div key={i} className="border-l-2 border-accent/30 pl-4 py-1 group-hover:border-accent transition-colors">
-                    <h4 className="text-white font-medium">{exp.title}</h4>
-                    <p className="text-accent-light text-sm">{exp.company}</p>
-                    <p className="text-gray-500 text-xs mt-1">
+                    <h4 className="text-white font-medium text-lg">{exp.company}</h4>
+                    <p className="text-accent-light text-sm">{exp.position}</p>
+                    <p className="text-gray-500 text-xs mt-1 mb-2">
                       {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                     </p>
+                    {exp.description && (
+                      <p className="text-gray-400 text-sm mt-2 whitespace-pre-wrap leading-relaxed">
+                        {exp.description}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -168,12 +173,19 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
           {educations.length > 0 && (
             <div className="bg-white/5 p-8 rounded-3xl border border-white/10 w-full md:col-span-1 hover:border-gold/40 transition-colors group">
               <h3 className="text-2xl font-bold text-white mb-4">Education</h3>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {educations.map((edu: any, i: number) => (
                   <div key={i} className="border-l-2 border-gold/30 pl-4 py-1 group-hover:border-gold transition-colors">
-                    <h4 className="text-white font-medium">{edu.institution}</h4>
+                    <h4 className="text-white font-medium text-lg">{edu.institution}</h4>
                     <p className="text-gold-light text-sm">{edu.degree} in {edu.field}</p>
-                    <p className="text-gray-500 text-xs mt-1">{edu.startDate} - {edu.endDate}</p>
+                    <p className="text-gray-500 text-xs mt-1 mb-2">
+                      {edu.startDate} - {edu.current ? "Present" : edu.endDate} {edu.gpa && `• GPA: ${edu.gpa}`}
+                    </p>
+                    {edu.description && (
+                      <p className="text-gray-400 text-sm mt-2 whitespace-pre-wrap leading-relaxed">
+                        {edu.description}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

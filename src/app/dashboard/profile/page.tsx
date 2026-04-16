@@ -12,7 +12,7 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [form, setForm] = useState({
-    fullName: "", title: "", email: "", phone: "", location: "", summary: "", photoURL: "",
+    fullName: "", title: "", email: "", phone: "", location: "", summary: "", overview: "", photoURL: "",
     whatsapp: "", instagram: "", linkedin: ""
   });
 
@@ -29,6 +29,7 @@ export default function ProfilePage() {
           phone: d.profile?.phone || "",
           location: d.profile?.location || "",
           summary: d.profile?.summary || "",
+          overview: d.profile?.overview || "",
           photoURL: d.profile?.photoURL || d.photoURL || "",
           whatsapp: d.profile?.whatsapp || "",
           instagram: d.profile?.instagram || "",
@@ -55,7 +56,7 @@ export default function ProfilePage() {
     const file = e.target.files[0];
     setUploadingImage(true);
     try {
-      const storageRef = ref(storage, `images/${user.uid}/profile_${Date.now()}`);
+      const storageRef = ref(storage, `users/${user.uid}/images/profile_${Date.now()}`);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       setForm({ ...form, photoURL: url });
@@ -111,13 +112,23 @@ export default function ProfilePage() {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Professional Summary</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Home Hero Description</label>
           <textarea
-            rows={4}
+            rows={3}
             value={form.summary}
             onChange={(e) => setForm({ ...form, summary: e.target.value })}
             className="input-field resize-none"
-            placeholder="Brief overview of your professional background..."
+            placeholder="Description below your name on the home page..."
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">My Overview (About Me Page)</label>
+          <textarea
+            rows={5}
+            value={form.overview}
+            onChange={(e) => setForm({ ...form, overview: e.target.value })}
+            className="input-field resize-none"
+            placeholder="Detailed overview for the About Me section..."
           />
         </div>
         <div className="flex items-center gap-3 pt-2">

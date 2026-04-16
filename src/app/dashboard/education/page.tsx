@@ -6,7 +6,7 @@ import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
 import { db } from "@/lib/firebase";
 
 interface Education {
-  id: string; institution: string; degree: string; field: string; startDate: string; endDate: string; gpa: string;
+  id: string; institution: string; degree: string; field: string; startDate: string; endDate: string; gpa: string; description?: string; current?: boolean;
 }
 
 export default function EducationPage() {
@@ -15,7 +15,7 @@ export default function EducationPage() {
   const [editing, setEditing] = useState<Education | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const empty: Education = { id: "", institution: "", degree: "", field: "", startDate: "", endDate: "", gpa: "" };
+  const empty: Education = { id: "", institution: "", degree: "", field: "", startDate: "", endDate: "", gpa: "", description: "", current: false };
 
   useEffect(() => {
     if (!user) return;
@@ -70,20 +70,30 @@ export default function EducationPage() {
             ].map(({ key, label, placeholder }) => (
               <div key={key}>
                 <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-                <input type="text" value={(editing as unknown as Record<string, string>)[key]} onChange={(e) => setEditing({ ...editing, [key]: e.target.value })} className="input-field" placeholder={placeholder} />
+                <input type="text" value={(editing as unknown as Record<string, string>)[key] || ""} onChange={(e) => setEditing({ ...editing, [key]: e.target.value })} className="input-field" placeholder={placeholder} />
               </div>
             ))}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Description (Activities, Societies, etc.)</label>
+              <textarea rows={3} value={editing.description || ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className="input-field resize-none" placeholder="Honors, Thesis, etc..." />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Start Date</label>
                 <input type="month" value={editing.startDate} onChange={(e) => setEditing({ ...editing, startDate: e.target.value })} className="input-field" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">End Date</label>
-                <input type="month" value={editing.endDate} onChange={(e) => setEditing({ ...editing, endDate: e.target.value })} className="input-field" />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-medium text-gray-300">End Date</label>
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-400 hover:text-white transition-colors">
+                    <input type="checkbox" checked={editing.current || false} onChange={(e) => setEditing({ ...editing, current: e.target.checked, endDate: e.target.checked ? "" : editing.endDate })} className="rounded bg-navy-900 border-white/20 text-accent focus:ring-accent" />
+                    Present
+                  </label>
+                </div>
+                <input type="month" value={editing.endDate || ""} onChange={(e) => setEditing({ ...editing, endDate: e.target.value })} disabled={editing.current} className="input-field disabled:opacity-50" />
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 pt-2">
               <button onClick={handleSave} disabled={saving} className="btn-primary text-sm px-4 py-2">{saving ? "Saving..." : "Save"}</button>
               <button onClick={() => setEditing(null)} className="btn-secondary text-sm px-4 py-2">Cancel</button>
             </div>

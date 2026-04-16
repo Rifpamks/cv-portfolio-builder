@@ -3,8 +3,8 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "CVBuilder — Dynamic CV & Portfolio Builder",
-  description: "Build, manage, and share your professional CV and portfolio with ease. Powered by Next.js and Firebase.",
+  title: "Rifaldi-Portfolio-Builder",
+  description: "Professional CV and portfolio with ease. Powered by Next.js, CSS, vercel & Firebase.",
   keywords: "CV builder, portfolio, resume, professional profile",
 };
 
