@@ -1,0 +1,97 @@
+$kind: http-request
+name: https://ms.parkee.app/location/v1/locations/cms/{{id}}
+url: https://ms.parkee.app/location/v1/locations/cms/{{id}}
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBwb3J0QHBhcmtlZS5hcHAiLCJ1dWlkIjoiNjYyOGE5YzktYjlkNi00YzMwLThmMDItOTg0NzEwM2ZjNTg5IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9JTlRFUk5BTF9TVVBQT1JUIl0sImlhdCI6MTc2OTQ4NjQzNiwiZXhwIjoxNzc3MjYyNDM2fQ.vMb8Ww_2OKh3DesOKLWQv4HxoCcpR1mOe-0boTSiNhA
+scripts:
+  - type: beforeRequest
+    code: "(async () => {\r
+
+      \    let maxId = 1672;\r
+
+      \    let token =
+      \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBwb3J0QHBhcmtlZS5hcHAiLCJ1dWlkIjoiNj\
+      YyOGE5YzktYjlkNi00YzMwLThmMDItOTg0NzEwM2ZjNTg5IiwiYXV0aG9yaXRpZXMiOlsiUk9\
+      MRV9JTlRFUk5BTF9TVVBQT1JUIl0sImlhdCI6MTc2OTQ4NjQzNiwiZXhwIjoxNzc3MjYyNDM2\
+      fQ.vMb8Ww_2OKh3DesOKLWQv4HxoCcpR1mOe-0boTSiNhA\"; // penting!\r
+
+      \r
+
+      \    let results = [];\r
+
+      \r
+
+      \    for (let id = 1; id <= maxId; id++) {\r
+
+      \        try {\r
+
+      \            let res = await
+      fetch(`https://ms.parkee.app/location/v1/locations/cms/${id}`, {\r
+
+      \                method: \"GET\",\r
+
+      \                headers: {\r
+
+      \                    \"Authorization\": `Bearer ${token}`,\r
+
+      \                    \"Content-Type\": \"application/json\"\r
+
+      \                }\r
+
+      \            });\r
+
+      \r
+
+      \            if (!res.ok) continue;\r
+
+      \r
+
+      \            let data = await res.json();\r
+
+      \r
+
+      \            let line = `${data.id} | ${data.name} |
+      ${data.webMembershipFlow}`;\r
+
+      \            console.log(line);\r
+
+      \r
+
+      \            results.push(line);\r
+
+      \r
+
+      \        } catch (err) {\r
+
+      \            console.log(\"error id:\", id);\r
+
+      \        }\r
+
+      \r
+
+      \        // delay biar gak kena rate limit\r
+
+      \        await new Promise(r => setTimeout(r, 50));\r
+
+      \    }\r
+
+      \r
+
+      \    console.log(\"DONE 🚀\");\r
+
+      \r
+
+      \    // gabung jadi text\r
+
+      \    let output = results.join(\"\\n\");\r
+
+      \r
+
+      \    console.log(output);\r
+
+      })();"
+    language: text/javascript
+order: 3494608722326733

@@ -9,15 +9,19 @@
     --background: 210 40% 98%;
     --foreground: 222 47% 11%;
   }
+
   .dark {
     --background: 230 50% 8%;
     --foreground: 210 40% 98%;
   }
+
   body {
     @apply bg-navy-950 text-white antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
-  .light body, body:not(.dark) {
+
+  :root:not(.dark) body,
+  .light body {
     @apply bg-gray-50 text-gray-900;
   }
 }
@@ -26,27 +30,27 @@
   .glass-card {
     @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
   }
+
   .glass-card-hover {
     @apply glass-card hover:bg-white/10 hover:border-accent/30 transition-all duration-300;
   }
+
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-white rounded-xl font-semibold 
-           hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5 active:translate-y-0 
-           transition-all duration-200;
+    @apply px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200;
   }
+
   .btn-secondary {
-    @apply px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-semibold 
-           hover:bg-white/10 hover:border-accent/30 transition-all duration-200;
+    @apply px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-accent/30 transition-all duration-200;
   }
+
   .input-field {
-    @apply w-full px-4 py-3 bg-navy-900/50 border border-white/10 rounded-xl text-white 
-           placeholder-gray-500 focus:outline-none focus:border-accent/50 focus:ring-2 
-           focus:ring-accent/20 transition-all duration-200;
+    @apply w-full px-4 py-3 bg-navy-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 focus:ring-2 focus:ring-accent/20 transition-all duration-200;
   }
+
   .section-title {
-    @apply text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-white to-gray-400 
-           bg-clip-text text-transparent;
+    @apply text-3xl md:text-4xl font-display font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent;
   }
+
   .gradient-text {
     @apply bg-gradient-to-r from-accent-light via-accent to-gold bg-clip-text text-transparent;
   }
@@ -62,13 +66,16 @@
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: rgba(10, 15, 46, 0.5);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(99, 102, 241, 0.3);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.5);
 }
@@ -79,10 +86,19 @@
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
+
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Floating orbs */
@@ -93,7 +109,15 @@
   opacity: 0.15;
   animation: float 8s ease-in-out infinite;
 }
+
 @keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-30px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-30px) scale(1.05);
+  }
 }

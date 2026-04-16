@@ -1,0 +1,70 @@
+$kind: http-request
+name: New Request
+url: https://ms.parkee.app/location/v1/locations/cms/{{id}}
+method: GET
+headers:
+  Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBwb3J0QHBhcmtlZS5hcHAiLCJ1dWlkIjoiNjYyOGE5YzktYjlkNi00YzMwLThmMDItOTg0NzEwM2ZjNTg5IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9JTlRFUk5BTF9TVVBQT1JUIl0sImlhdCI6MTc2OTQ4NjQzNiwiZXhwIjoxNzc3MjYyNDM2fQ.vMb8Ww_2OKh3DesOKLWQv4HxoCcpR1mOe-0boTSiNhA
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBwb3J0QHBhcmtlZS5hcHAiLCJ1dWlkIjoiNjYyOGE5YzktYjlkNi00YzMwLThmMDItOTg0NzEwM2ZjNTg5IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9JTlRFUk5BTF9TVVBQT1JUIl0sImlhdCI6MTc2OTQ4NjQzNiwiZXhwIjoxNzc3MjYyNDM2fQ.vMb8Ww_2OKh3DesOKLWQv4HxoCcpR1mOe-0boTSiNhA
+scripts:
+  - type: beforeRequest
+    code: "// ambil variable\r
+
+      let id = parseInt(pm.environment.get(\"id\") || 1);\r
+
+      let maxId = parseInt(pm.environment.get(\"maxId\") || 1);\r
+
+      \r
+
+      // ambil response\r
+
+      let data = null;\r
+
+      try {\r
+
+      \    data = pm.response.json();\r
+
+      } catch (e) {}\r
+
+      \r
+
+      // kalau sukses\r
+
+      if (pm.response.code === 200 && data) {\r
+
+      \    console.log(`${data.id} | ${data.name} |
+      ${data.webMembershipFlow}`);\r
+
+      }\r
+
+      \r
+
+      // naikkan id\r
+
+      id++;\r
+
+      \r
+
+      // simpan id baru\r
+
+      pm.environment.set(\"id\", id);\r
+
+      \r
+
+      // lanjut loop\r
+
+      if (id <= maxId) {\r
+
+      \    postman.setNextRequest(pm.info.requestName);\r
+
+      } else {\r
+
+      \    console.log(\"DONE 🚀\");\r
+
+      \    postman.setNextRequest(null);\r
+
+      }"
+    language: text/javascript
+order: 1775125527999

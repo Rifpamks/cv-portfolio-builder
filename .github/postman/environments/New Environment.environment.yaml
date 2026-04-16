@@ -1,0 +1,12 @@
+name: New Environment
+values:
+  - key: id
+    value: '1'
+    enabled: true
+  - key: maxId
+    value: '1672'
+    enabled: true
+  - key: results
+    value: '[]'
+    enabled: true
+color: 240

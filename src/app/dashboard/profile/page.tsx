@@ -3,14 +3,17 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { adminGetDoc, adminUpdateDoc, adminSetDoc } from "@/lib/adminProxy";
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [form, setForm] = useState({
     fullName: "", title: "", email: "", phone: "", location: "", summary: "", photoURL: "",
+    whatsapp: "", instagram: "", linkedin: ""
   });
 
   useEffect(() => {
@@ -27,6 +30,9 @@ export default function ProfilePage() {
           location: d.profile?.location || "",
           summary: d.profile?.summary || "",
           photoURL: d.profile?.photoURL || d.photoURL || "",
+          whatsapp: d.profile?.whatsapp || "",
+          instagram: d.profile?.instagram || "",
+          linkedin: d.profile?.linkedin || "",
         });
       }
     };
@@ -44,6 +50,22 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0] || !user) return;
+    const file = e.target.files[0];
+    setUploadingImage(true);
+    try {
+      const storageRef = ref(storage, `images/${user.uid}/profile_${Date.now()}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      setForm({ ...form, photoURL: url });
+    } catch (err) {
+      console.error("Photo upload failed", err);
+      alert("Failed to upload photo.");
+    }
+    setUploadingImage(false);
+  };
+
   return (
     <div className="max-w-2xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -56,7 +78,9 @@ export default function ProfilePage() {
           { key: "email", label: "Email", type: "email", placeholder: "john@example.com" },
           { key: "phone", label: "Phone", type: "tel", placeholder: "+62 812-3456-7890" },
           { key: "location", label: "Location", type: "text", placeholder: "Jakarta, Indonesia" },
-          { key: "photoURL", label: "Photo URL", type: "url", placeholder: "https://..." },
+          { key: "whatsapp", label: "WhatsApp (e.g. 62812...)", type: "text", placeholder: "628..." },
+          { key: "instagram", label: "Instagram URL", type: "url", placeholder: "https://instagram.com/..." },
+          { key: "linkedin", label: "LinkedIn URL", type: "url", placeholder: "https://linkedin.com/in/..." },
         ].map(({ key, label, type, placeholder }) => (
           <div key={key}>
             <label className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
@@ -69,6 +93,23 @@ export default function ProfilePage() {
             />
           </div>
         ))}
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Profile Photo (Upload from Device)</label>
+          <div className="flex items-center gap-4">
+            {form.photoURL && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={form.photoURL} alt="Profile" className="w-16 h-16 rounded-full object-cover border border-white/20" />
+            )}
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              disabled={uploadingImage}
+              className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-accent/20 file:text-accent-light hover:file:bg-accent/30"
+            />
+            {uploadingImage && <span className="text-xs text-gray-400 animate-pulse">Uploading...</span>}
+          </div>
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-1">Professional Summary</label>
           <textarea
