@@ -24,10 +24,10 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
   const educations = profileData?.education || [];
 
   return (
-    <div className="min-h-screen bg-[#0F1015] text-white pt-24 relative selection:bg-accent/30 selection:text-white pb-24">
+    <div className="min-h-screen bg-[#0F1015] text-white pt-24 relative selection:bg-accent/30 selection:text-white pb-24 overflow-x-hidden w-full">
       {/* Global Background Shapes */}
-      <div className="fixed top-1/4 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] -z-10 pointer-events-none translate-x-1/2" />
-      <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px] -z-10 pointer-events-none -translate-x-1/2" />
+      <div className="fixed top-1/4 right-0 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-accent/10 rounded-full blur-[90px] md:blur-[120px] -z-10 pointer-events-none translate-x-1/2" />
+      <div className="fixed bottom-0 left-0 w-[250px] h-[250px] md:w-[500px] md:h-[500px] bg-purple-900/10 rounded-full blur-[80px] md:blur-[100px] -z-10 pointer-events-none -translate-x-1/2" />
 
       {/* --- HERO SECTION --- */}
       <section id="hero" className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-10 lg:gap-12 items-center min-h-[calc(100vh-6rem)] relative pt-10 lg:pt-0 pb-20 lg:pb-0">
@@ -111,8 +111,8 @@ export default function HomeClient({ profileData, portfolioData }: { profileData
             </div>
           )}
 
-          <div className="absolute top-4 lg:top-10 right-4 lg:right-10 text-accent/50 text-4xl font-light scale-150 animate-pulse">+</div>
-          <div className="absolute -bottom-4 lg:bottom-16 -right-4 lg:-right-8 w-10 h-10 lg:w-12 lg:h-12 border border-accent/40 rounded-full animate-bounce" />
+          <div className="absolute top-4 lg:top-10 right-2 lg:right-4 text-accent/50 text-4xl font-light scale-150 animate-pulse">+</div>
+          <div className="absolute -bottom-4 lg:bottom-16 right-0 lg:right-0 w-10 h-10 lg:w-12 lg:h-12 border border-accent/40 rounded-full animate-bounce" />
           <div className="absolute top-1/4 -left-2 lg:-left-4 w-3 h-3 lg:w-4 lg:h-4 bg-accent/60 rounded-full blur-[2px]" />
         </motion.div>
       </section>
