@@ -59,10 +59,19 @@ export default function ProfilePage() {
       const storageRef = ref(storage, `users/${user.uid}/images/profile_${Date.now()}`);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
-      setForm({ ...form, photoURL: url });
+      const updatedForm = { ...form, photoURL: url };
+      setForm(updatedForm);
+      
+      // Auto-save the new photo URL to the database
+      setSaving(true);
+      await adminUpdateDoc("users", user.uid, { profile: updatedForm });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+      setSaving(false);
     } catch (err) {
       console.error("Photo upload failed", err);
       alert("Failed to upload photo.");
+      setSaving(false);
     }
     setUploadingImage(false);
   };

@@ -2,7 +2,7 @@
 import { adminDb } from "@/lib/firebaseAdmin";
 import HomeClient from "@/components/HomeClient";
 
-export const revalidate = 60; // Revalidate the data every 60 seconds (ISR)
+export const revalidate = 0; // Disable caching to fetch live profile data
 
 export default async function Home() {
   let profileData = null;
@@ -11,10 +11,13 @@ export default async function Home() {
   try {
     // Fetch the single admin public profile bypassing security rules
     if (adminDb) {
-      const snap = await adminDb.collection("publicProfiles").limit(1).get();
+      const snap = await adminDb.collection("publicProfiles").get();
       if (!snap.empty) {
+        // Find the first valid user who has filled out their profile
+        const validDoc = snap.docs.find(doc => doc.data().profile?.fullName) || snap.docs[0];
+        
         // Convert to plain object to pass as prop
-        const data = snap.docs[0].data();
+        const data = validDoc.data();
         profileData = JSON.parse(JSON.stringify(data));
         
         if (data.portfolio && Array.isArray(data.portfolio)) {
